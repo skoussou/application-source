@@ -94,6 +94,29 @@ spec:
         workspaces:
           - name: output
             workspace: app-source
+      # ------------ GENERATE VERSION ------------ #
+      - name: generate-version
+        runAfter:
+          - git-app-clone
+        taskRef:
+          kind: Task
+          name: generate-version
+        params:
+          - name: APP_NAME
+            value: $(params.APP_REPO_NAME)
+        workspaces:
+          - name: source
+            workspace: app-source
+      # ------------ UNIT TEST ------------ #
+      - name: unit-test
+        runAfter:
+          - generate-version
+        taskRef:
+          kind: Task
+          name: mock
+        params:
+          - name: MOCK_MSG
+            value: unit-test
   workspaces:
     - name: source
       workspace: app-source
