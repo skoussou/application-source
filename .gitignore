@@ -1,14 +1,39 @@
-# ---> VisualStudioCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-!.vscode/*.code-snippets
+#Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
 
-# Local History for Visual Studio Code
-.history/
+# Eclipse
+.project
+.classpath
+.settings/
+bin/
 
-# Built Visual Studio Code Extensions
-*.vsix
+# IntelliJ
+.idea
+*.ipr
+*.iml
+*.iws
 
+# NetBeans
+nb-configuration.xml
+
+# Visual Studio Code
+.vscode
+.factorypath
+
+# OSX
+.DS_Store
+
+# Vim
+*.swp
+*.swo
+
+# patch
+*.orig
+*.rej
+
+# Local environment
+.env
