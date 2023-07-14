@@ -117,6 +117,69 @@ spec:
         params:
           - name: MOCK_MSG
             value: unit-test
+      # ------------ CODE ANALYSIS ------------ #
+      - name: code-analysis
+        runAfter:
+          - generate-version
+        taskRef:
+          kind: Task
+          name: mock
+        params:
+          - name: MOCK_MSG
+            value: code-analysis
+      # ------------ DEPENDENCY CHECK ------------ #
+      - name: dependency-check
+        runAfter:
+          - generate-version
+        taskRef:
+          kind: Task
+          name: mock
+        params:
+          - name: MOCK_MSG
+            value: dependency-check
+      # ------------ PACKAGE APP ------------ #
+      - name: package-app
+        runAfter:
+          - dependency-check
+          - code-analysis
+          - unit-test
+        taskRef:
+          kind: Task
+          name: mock
+        params:
+          - name: MOCK_MSG
+            value: package-app
+      # ------------ NEXUS UPLOAD ------------ #
+      - name: nexus-upload
+        runAfter:
+          - package-app
+        taskRef:
+          kind: Task
+          name: mock
+        params:
+          - name: MOCK_MSG
+            value: nexus-upload
+      # ------------ BUILD IMAGE ------------ #
+      - name: build-image
+        runAfter:
+          - nexus-upload
+        taskRef:
+          task: s2i-java-custom
+          params:
+            - name: url
+              value: https://github.com/skoussou/tekton-catalog.git
+            - name: revision
+              value: main
+            - name: pathInRepo
+              value: ci-tasks/resources/s2i-java-custom/0.1/s2i-java.yaml
+        params:
+          - name: IMAGE
+            value: $(params.REGISTRY)/$(params.APP_NAME)
+          - name: PATH_CONTEXT
+            value: $(params.APP_REPO_NAME)
+        workspaces:
+          - name: source
+            workspace: app-source
   workspaces:
     - name: source
       workspace: app-source
