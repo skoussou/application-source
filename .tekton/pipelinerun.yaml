@@ -13,16 +13,16 @@ metadata:
 
     # Fetch the git-clone task from hub, we are able to reference later on it
     # with taskRef and it will automatically be embdded into our pipeline.
-    pipelinesascode.tekton.dev/task: "ci-tasks/resources/git-clone-custom/0.1/git-clone.yaml"
+    pipelinesascode.tekton.dev/task: ".tekton/ci-tasks/resources/git-clone-custom/0.1/git-clone.yaml"
 
     # Use s2i build java task from github item to build java container image
-    pipelinesascode.tekton.dev/task-1: "ci-tasks/resources/s2i-java-custom/0.1/s2i-java.yaml"
+    pipelinesascode.tekton.dev/task-1: ".tekton/ci-tasks/resources/s2i-java-custom/0.1/s2i-java.yaml"
 
     # Use mock task from github
-    pipelinesascode.tekton.dev/task-2: "ci-tasks/resources/mock/0.1/task-mock.yaml"
-    pipelinesascode.tekton.dev/task-3: "ci-tasks/resources/task-create-pr-to-deploy/0.1/task-create-pr-to-deploy.yaml"
-    pipelinesascode.tekton.dev/task-4: "ci-tasks/resources/task-generate-version/0.1/task-generate-version.yaml"
-    pipelinesascode.tekton.dev/task-5: "ci-tasks/resources/task-tag-image/0.1/task-tag-image.yaml"
+    pipelinesascode.tekton.dev/task-2: ".tekton/ci-tasks/resources/mock/0.1/task-mock.yaml"
+    pipelinesascode.tekton.dev/task-3: ".tekton/ci-tasks/resources/task-create-pr-to-deploy/0.1/task-create-pr-to-deploy.yaml"
+    pipelinesascode.tekton.dev/task-4: ".tekton/ci-tasks/resources/task-generate-version/0.1/task-generate-version.yaml"
+    pipelinesascode.tekton.dev/task-5: ".tekton/ci-tasks/resources/task-tag-image/0.1/task-tag-image.yaml"
 
     # You can add more tasks by increasing the suffix number, you can specify
     # them as array to have multiple of them.
