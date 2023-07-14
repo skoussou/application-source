@@ -40,6 +40,30 @@ spec:
       value: "{{ repo_url }}"
     - name: revision
       value: "{{ revision }}"
+    # The variable with brackets are special to Pipelines as Code
+    # They will automatically be expanded with the events from Github.
+    - name: APP_NAME
+      value: quarkus-app
+    - name: ENV
+      value: string
+      default: dev
+    - name: APP_REPO_URL
+      value: "{{ repo_url }}"
+    - name: APP_REPO_NAME
+      value: string
+    - name: APP_GIT_REVISION
+      value: "{{ revision }}"
+    - name: DEPLOY_REPO_URL
+      value: http://gitea.sk-workshop-components.svc:3000
+    - name: DEPLOY_REPO_OWNER
+      value: gitea
+    - name: DEPLOY_REPO_NAME
+      value: application-deploy
+    - name: REGISTRY
+      value: image-registry.openshift-image-registry.svc:5000/sk-app-dev
+    - name: CI_NS_PREFIX
+      type: string
+      default: sk         
   pipelineSpec:
     params:
       - name: repo_url
