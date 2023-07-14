@@ -81,7 +81,7 @@ spec:
       # ------------ CLONE APP SOURCE ------------ #
       - name: git-app-clone
         taskRef:
-          name: git-clone-custom-wrong
+          name: git-clone-custom
         params:
           - name: url
             value: $(params.APP_REPO_URL)
@@ -99,7 +99,7 @@ spec:
         runAfter:
           - git-app-clone
         taskRef:
-          name: generate-version
+          name: generate-version-wrong
         params:
           - name: APP_NAME
             value: $(params.APP_REPO_NAME)
