@@ -109,7 +109,7 @@ spec:
       # ------------ UNIT TEST ------------ #
       - name: unit-test
         runAfter:
-          - generate-version
+          - generate-version-wrong
         taskRef:
           name: mock
         params:
