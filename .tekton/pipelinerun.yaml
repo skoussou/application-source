@@ -13,16 +13,16 @@ metadata:
 
     # Fetch the git-clone task from hub, we are able to reference later on it
     # with taskRef and it will automatically be embdded into our pipeline.
-    pipelinesascode.tekton.dev/task: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/git-clone-custom/0.1/git-clone.yaml"
+    pipelinesascode.tekton.dev/task: "ci-tasks/resources/git-clone-custom/0.1/git-clone.yaml"
 
     # Use s2i build java task from github item to build java container image
-    pipelinesascode.tekton.dev/task-1: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/s2i-java-custom/0.1/s2i-java.yaml"
+    pipelinesascode.tekton.dev/task-1: "ci-tasks/resources/s2i-java-custom/0.1/s2i-java.yaml"
 
     # Use mock task from github
-    pipelinesascode.tekton.dev/task-2: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/mock/0.1/task-mock.yaml"
-    pipelinesascode.tekton.dev/task-3: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/task-create-pr-to-deploy/0.1/task-create-pr-to-deploy.yaml"
-    pipelinesascode.tekton.dev/task-4: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/task-generate-version/0.1/task-generate-version.yaml"
-    pipelinesascode.tekton.dev/task-5: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/task-tag-image/0.1/task-tag-image.yaml"
+    pipelinesascode.tekton.dev/task-2: "ci-tasks/resources/mock/0.1/task-mock.yaml"
+    pipelinesascode.tekton.dev/task-3: "ci-tasks/resources/task-create-pr-to-deploy/0.1/task-create-pr-to-deploy.yaml"
+    pipelinesascode.tekton.dev/task-4: "ci-tasks/resources/task-generate-version/0.1/task-generate-version.yaml"
+    pipelinesascode.tekton.dev/task-5: "ci-tasks/resources/task-tag-image/0.1/task-tag-image.yaml"
 
     # You can add more tasks by increasing the suffix number, you can specify
     # them as array to have multiple of them.
@@ -106,6 +106,53 @@ spec:
         workspaces:
           - name: source
             workspace: app-source
+      # ------------ UNIT TEST ------------ #
+      - name: unit-test
+        runAfter:
+          - generate-version
+        taskRef:
+          name: mock
+        params:
+          - name: MOCK_MSG
+            value: unit-test
+      # ------------ CODE ANALYSIS ------------ #
+      - name: code-analysis
+        runAfter:
+          - generate-version
+        taskRef:
+          name: mock
+        params:
+          - name: MOCK_MSG
+            value: code-analysis
+      # ------------ DEPENDENCY CHECK ------------ #
+      - name: dependency-check
+        runAfter:
+          - generate-version
+        taskRef:
+          name: mock
+        params:
+          - name: MOCK_MSG
+            value: dependency-check
+      # ------------ PACKAGE APP ------------ #
+      - name: package-app
+        runAfter:
+          - dependency-check
+          - code-analysis
+          - unit-test
+        taskRef:
+          name: mock
+        params:
+          - name: MOCK_MSG
+            value: package-app
+      # ------------ NEXUS UPLOAD ------------ #
+      - name: nexus-upload
+        runAfter:
+          - package-app
+        taskRef:
+          name: mock
+        params:
+          - name: MOCK_MSG
+            value: nexus-upload
       # ------------ BUILD IMAGE ------------ #
       - name: build-image
         runAfter:
