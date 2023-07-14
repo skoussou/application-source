@@ -48,20 +48,22 @@ spec:
       - name: source
       - name: basic-auth
     tasks:
-
-      - name: fetch-repository
+      # ------------ CLONE APP SOURCE ------------ #
+      - name: git-app-clone
         taskRef:
           name: git-clone-custom
-        workspaces:
-          - name: output
-            workspace: source
-          - name: basic-auth
-            workspace: basic-auth
         params:
           - name: url
-            value: $(params.repo_url)
+            value: $(params.APP_REPO_URL)
           - name: revision
-            value: $(params.revision)
+            value: $(params.APP_GIT_REVISION)
+          - name: deleteExisting
+            value: 'true'
+          - name: subdirectory
+            value: $(params.APP_REPO_NAME)
+        workspaces:
+          - name: output
+            workspace: app-source
 
       # - name: mvn-config
       #   taskRef: 
