@@ -124,6 +124,15 @@ spec:
         params:
           - name: MOCK_MSG
             value: code-analysis
+      # ------------ DEPENDENCY CHECK ------------ #
+      - name: dependency-check
+        runAfter:
+          - generate-version
+        taskRef:
+          name: mock
+        params:
+          - name: MOCK_MSG
+            value: dependency-check
   workspaces:
     - name: source
       workspace: app-source
