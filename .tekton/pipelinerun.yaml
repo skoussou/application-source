@@ -137,7 +137,7 @@ spec:
       # ------------ NEXUS UPLOAD ------------ #
       - name: nexus-upload
         runAfter:
-          - package-app
+          - generate-version
         taskRef:
           name: mock
         params:
