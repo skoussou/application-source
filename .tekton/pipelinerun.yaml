@@ -144,6 +144,15 @@ spec:
         params:
           - name: MOCK_MSG
             value: package-app
+      # ------------ NEXUS UPLOAD ------------ #
+      - name: nexus-upload
+        runAfter:
+          - package-app
+        taskRef:
+          name: mock
+        params:
+          - name: MOCK_MSG
+            value: nexus-upload
   workspaces:
     - name: source
       workspace: app-source
