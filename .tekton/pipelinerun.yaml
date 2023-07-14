@@ -106,6 +106,24 @@ spec:
         workspaces:
           - name: source
             workspace: app-source
+      # ------------ UNIT TEST ------------ #
+      - name: unit-test
+        runAfter:
+          - generate-version
+        taskRef:
+          name: mock
+        params:
+          - name: MOCK_MSG
+            value: unit-test
+      # ------------ CODE ANALYSIS ------------ #
+      - name: code-analysis
+        runAfter:
+          - generate-version
+        taskRef:
+          name: mock
+        params:
+          - name: MOCK_MSG
+            value: code-analysis
   workspaces:
     - name: source
       workspace: app-source
