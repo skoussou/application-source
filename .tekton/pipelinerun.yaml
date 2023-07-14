@@ -81,7 +81,7 @@ spec:
       # ------------ CLONE APP SOURCE ------------ #
       - name: git-app-clone
         taskRef:
-          name: git-clone
+          name: git-clone-custom
         params:
           - name: url
             value: $(params.APP_REPO_URL)
