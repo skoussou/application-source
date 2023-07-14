@@ -13,7 +13,8 @@ metadata:
 
     # Fetch the git-clone task from hub, we are able to reference later on it
     # with taskRef and it will automatically be embedded into our pipeline.
-    pipelinesascode.tekton.dev/task: "git-clone"
+    #pipelinesascode.tekton.dev/task: "git-clone"
+    pipelinesascode.tekton.dev/task: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/git-clone-custom/0.1/git-clone.yaml"
 
     # Use maven task from the hub to test our Java project
     pipelinesascode.tekton.dev/task-1: "maven"
@@ -50,7 +51,7 @@ spec:
 
       - name: fetch-repository
         taskRef:
-          name: git-clone
+          name: git-clone-custom
         workspaces:
           - name: output
             workspace: source
