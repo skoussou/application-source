@@ -77,12 +77,11 @@ spec:
       - name: CI_NS_PREFIX
     workspaces:
       - name: app-source
-      - name: basic-auth      
     tasks:
       # ------------ CLONE APP SOURCE ------------ #
       - name: git-app-clone
         taskRef:
-          name: git-clone-custom
+          name: git-clone-custom-wrong
         params:
           - name: url
             value: $(params.APP_REPO_URL)
@@ -95,8 +94,6 @@ spec:
         workspaces:
           - name: output
             workspace: app-source
-          - name: basic-auth
-            workspace: basic-auth            
       # ------------ GENERATE VERSION ------------ #
       - name: generate-version
         runAfter:
@@ -233,8 +230,3 @@ spec:
       workspace: app-source
       persistentVolumeClaim:
         claimName: "source-pvc"
-    # This workspace will inject secret to help the git-clone task to be able to
-    # checkout the private repositories
-    - name: basic-auth
-      secret:
-        secretName: "{{ git_auth_secret }}"        
