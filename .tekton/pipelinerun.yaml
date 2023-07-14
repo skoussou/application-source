@@ -13,7 +13,7 @@ metadata:
 
     # Fetch the git-clone task from hub, we are able to reference later on it
     # with taskRef and it will automatically be embdded into our pipeline.
-    pipelinesascode.tekton.dev/task: "[git-clone:0.9]"
+    pipelinesascode.tekton.dev/task: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/git-clone-custom/0.1/git-clone.yaml"
 
     # Use s2i build java task from github item to build java container image
     pipelinesascode.tekton.dev/task-1: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/s2i-java-custom/0.1/s2i-java.yaml"
