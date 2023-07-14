@@ -47,6 +47,7 @@ spec:
     workspaces:
       - name: source
       - name: basic-auth
+      - name: app-source      
     tasks:
       # ------------ CLONE APP SOURCE ------------ #
       - name: git-app-clone
@@ -125,3 +126,7 @@ spec:
     - name: basic-auth
       secret:
         secretName: "{{ git_auth_secret }}"
+    - name: app-source
+      workspace: app-source
+      persistentVolumeClaim:
+        claimName: "source-pvc"        
