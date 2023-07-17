@@ -71,7 +71,6 @@ spec:
       - name: repo_url
       - name: revision
     workspaces:
-      - name: source
       - name: app-source      
     tasks:
       # ------------ CLONE APP SOURCE ------------ #
