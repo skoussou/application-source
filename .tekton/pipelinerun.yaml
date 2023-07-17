@@ -19,6 +19,8 @@ metadata:
     # Use maven task from the hub to test our Java project
     pipelinesascode.tekton.dev/task-1: "maven"
 
+    pipelinesascode.tekton.dev/task-2: "https://github.com/skoussou/tekton-catalog/tree/main/ci-tasks/resources/task-generate-version/0.1/task-generate-version.yaml"
+
     # You can add more tasks by increasing the suffix number, you can specify
     # them as array to have multiple of them.
     # browse the tasks you want to include from hub on https://hub.tekton.dev/
@@ -88,7 +90,18 @@ spec:
         workspaces:
           - name: output
             workspace: app-source
-
+      # ------------ GENERATE VERSION ------------ #
+      - name: generate-version
+        runAfter:
+          - git-app-clone
+        taskRef:
+          name: generate-version
+        params:
+          - name: APP_NAME
+            value: $(params.APP_REPO_NAME)
+        workspaces:
+          - name: source
+            workspace: app-source
       # - name: mvn-config
       #   taskRef: 
       #     name: mvn-config
@@ -103,7 +116,7 @@ spec:
           name: maven
           kind: ClusterTask
         runAfter:
-          - git-app-clone
+          - generate-version
         params:
           - name: GOALS
             value:
@@ -111,7 +124,7 @@ spec:
               - test
         workspaces:
         - name: source
-          workspace: source
+          workspace: app-source
         - name: maven-settings
           workspace: maven-settings
 
@@ -129,19 +142,11 @@ spec:
           name: maven
         workspaces:
           - name: source
-            workspace: source
+            workspace: app-source
           - name: maven-settings
             workspace: maven-settings
             
   workspaces:
-    - name: source
-      volumeClaimTemplate:
-        spec:
-          accessModes:
-            - ReadWriteOnce
-          resources:
-            requests:
-              storage: 1Gi
     - name: maven-settings
       emptyDir: {}
     - name: app-source
