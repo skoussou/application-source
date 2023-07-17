@@ -70,7 +70,6 @@ spec:
       - name: revision
     workspaces:
       - name: source
-      - name: basic-auth
       - name: app-source      
     tasks:
       # ------------ CLONE APP SOURCE ------------ #
@@ -145,11 +144,6 @@ spec:
               storage: 1Gi
     - name: maven-settings
       emptyDir: {}
-    # This workspace will inject secret to help the git-clone task to be able to
-    # checkout the private repositories
-    - name: basic-auth
-      secret:
-        secretName: "{{ git_auth_secret }}"
     - name: app-source
       workspace: app-source
       persistentVolumeClaim:
