@@ -19,7 +19,7 @@ metadata:
     # Use maven task from the hub to test our Java project
     pipelinesascode.tekton.dev/task-1: "maven"
 
-    pipelinesascode.tekton.dev/task-2: "https://github.com/skoussou/tekton-catalog/tree/main/ci-tasks/resources/task-generate-version/0.1/task-generate-version.yaml"
+    pipelinesascode.tekton.dev/task-2: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/task-generate-version/0.1/task-generate-version.yaml"
 
     # You can add more tasks by increasing the suffix number, you can specify
     # them as array to have multiple of them.
