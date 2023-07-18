@@ -21,7 +21,7 @@ metadata:
 
     pipelinesascode.tekton.dev/task-2: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/task-generate-version/0.1/task-generate-version.yaml"
     pipelinesascode.tekton.dev/task-3: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/mock/0.1/task-mock.yaml"    
-    pipelinesascode.tekton.dev/task-4: "ci-tasks/resources/s2i-java-custom/0.1/s2i-java.yaml"    
+    pipelinesascode.tekton.dev/task-4: ".tekton/ci-tasks/resources/s2i-java-custom/0.1/s2i-java.yaml"    
     # You can add more tasks by increasing the suffix number, you can specify
     # them as array to have multiple of them.
     # browse the tasks you want to include from hub on https://hub.tekton.dev/
