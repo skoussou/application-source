@@ -111,7 +111,7 @@ spec:
       #   workspaces:
       #   - name: workspace
       #     workspace: source
-      - name: maven-test
+      - name: unit-test
         taskRef:
           name: maven
           kind: ClusterTask
