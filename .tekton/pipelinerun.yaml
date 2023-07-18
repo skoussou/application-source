@@ -147,24 +147,46 @@ spec:
         params:
           - name: MOCK_MSG
             value: dependency-check
-            
-      - name: build-native-executable
-        params:
-          - name: GOALS
-            value:
-              - '-DskipTests'
-              - package
-              - '-Dquarkus.native.container-build=true'
+      # ------------ PACKAGE APP ------------ #
+      - name: package-app
         runAfter:
-          - maven-test
+          - dependency-check
+          - code-analysis
+          - unit-test
         taskRef:
-          kind: ClusterTask
-          name: maven
-        workspaces:
-          - name: source
-            workspace: app-source
-          - name: maven-settings
-            workspace: maven-settings
+          name: mock
+        params:
+          - name: MOCK_MSG
+            value: package-app
+      # ------------ NEXUS UPLOAD ------------ #
+      - name: nexus-upload
+        runAfter:
+          - package-app
+        taskRef:
+          name: mock
+        params:
+          - name: MOCK_MSG
+            value: nexus-upload
+            
+#      - name: build-native-executable
+#        params:
+#          - name: GOALS
+#            value:
+#              - '-DskipTests'
+#              - package
+#              - '-Dquarkus.native.container-build=true'
+#          - name: CONTEXT_DIR
+#            value: $(params.APP_REPO_NAME)
+#        runAfter:
+#          - maven-test
+#        taskRef:
+#          kind: ClusterTask
+#          name: maven
+#        workspaces:
+#          - name: source
+#            workspace: app-source
+#          - name: maven-settings
+#            workspace: maven-settings
             
   workspaces:
     - name: maven-settings
