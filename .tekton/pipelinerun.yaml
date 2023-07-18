@@ -28,7 +28,7 @@ metadata:
     pipelinesascode.tekton.dev/task-3: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/mock/0.1/task-mock.yaml"    
     pipelinesascode.tekton.dev/task-4: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/s2i-java-custom/0.1/s2i-java.yaml"    
     pipelinesascode.tekton.dev/task-5: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/task-tag-image/0.1/task-tag-image.yaml"    
-    
+    pipelinesascode.tekton.dev/task-6: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/task-tag-image/0.1/task-tag-image.yaml"        
 
     # How many runs we want to keep attached to this event
     pipelinesascode.tekton.dev/max-keep-runs: "5"
@@ -67,8 +67,7 @@ spec:
     - name: REGISTRY
       value: image-registry.openshift-image-registry.svc:5000/sk-app-dev
     - name: CI_NS_PREFIX
-      type: string
-      default: sk         
+      value: sk         
   pipelineSpec:
     params:
       - name: repo_url
@@ -220,7 +219,32 @@ spec:
             value: latest
           - name: IMAGE_NEW_TAG
             value: "$(tasks.generate-version.results.version)"            
-            
+      # ------------ CREATE PR ------------ #
+      - name: create-pr-to-deploy
+        runAfter:
+          - tag-image
+        taskRef:
+          name: create-pr-to-deploy
+        params:
+          - name: DEPLOY_REPO_URL
+            value: $(params.DEPLOY_REPO_URL)
+          - name: DEPLOY_REPO_OWNER
+            value: $(params.DEPLOY_REPO_OWNER)
+          - name: DEPLOY_REPO_NAME
+            value: $(params.DEPLOY_REPO_NAME)
+          - name: BRANCH_NAME
+            value: $(params.ENV)-image-$(tasks.generate-version.results.version)
+          - name: IMAGE_NAME
+            value: $(params.APP_NAME)
+          - name: IMAGE_URL
+            value: $(params.REGISTRY)/$(params.APP_NAME)
+          - name: IMAGE_NEW_VERSION
+            value: $(tasks.generate-version.results.version)
+          - name: ENV
+            value: $(params.ENV)
+          - name: PR_BODY
+            value: |
+              application: $(params.APP_NAME)\nmessage: 'New image for $(params.ENV) environment'\napplicationRepo: $(params.APP_REPO_URL)\napplicationRevision: $(params.APP_GIT_REVISION)\nimage: $(params.REGISTRY)/$(params.APP_NAME)\nversion: $(tasks.generate-version.results.version)\ndeployRepo: $(params.DEPLOY_REPO_URL)\ndeployOwner: $(params.DEPLOY_REPO_OWNER)\ndeployName: $(params.DEPLOY_REPO_NAME)\nenvironment: $(params.ENV)               
 #      - name: build-native-executable
 #        params:
 #          - name: GOALS
