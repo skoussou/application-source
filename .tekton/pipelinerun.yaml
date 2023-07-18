@@ -114,7 +114,6 @@ spec:
       - name: unit-test
         taskRef:
           name: maven
-          kind: ClusterTask
         runAfter:
           - generate-version
         params:
