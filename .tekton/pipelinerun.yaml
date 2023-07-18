@@ -18,15 +18,17 @@ metadata:
 
     # Use maven task from the hub to test our Java project
     pipelinesascode.tekton.dev/task-1: "maven"
-
-    pipelinesascode.tekton.dev/task-2: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/task-generate-version/0.1/task-generate-version.yaml"
-    pipelinesascode.tekton.dev/task-3: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/mock/0.1/task-mock.yaml"    
-    pipelinesascode.tekton.dev/task-4: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/s2i-java-custom/0.1/s2i-java.yaml"    
+   
     # You can add more tasks by increasing the suffix number, you can specify
     # them as array to have multiple of them.
     # browse the tasks you want to include from hub on https://hub.tekton.dev/
     #
     # pipelinesascode.tekton.dev/task-2: "[curl, buildah]"
+    pipelinesascode.tekton.dev/task-2: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/task-generate-version/0.1/task-generate-version.yaml"
+    pipelinesascode.tekton.dev/task-3: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/mock/0.1/task-mock.yaml"    
+    pipelinesascode.tekton.dev/task-4: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/s2i-java-custom/0.1/s2i-java.yaml"    
+    pipelinesascode.tekton.dev/task-5: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/task-tag-image/0.1/task-tag-image.yaml"    
+    
 
     # How many runs we want to keep attached to this event
     pipelinesascode.tekton.dev/max-keep-runs: "5"
@@ -116,18 +118,23 @@ spec:
           name: maven
         runAfter:
           - generate-version
+        taskRef:
+          name: mock
         params:
-          - name: CONTEXT_DIR
-            value: $(params.APP_REPO_NAME)
-          - name: GOALS
-            value:
-              - clean
-              - test
-        workspaces:
-        - name: source
-          workspace: app-source
-        - name: maven-settings
-          workspace: maven-settings
+          - name: MOCK_MSG
+            value: unit-test        
+#        params:
+#          - name: CONTEXT_DIR
+#            value: $(params.APP_REPO_NAME)
+#          - name: GOALS
+#            value:
+#              - clean
+#              - test
+#        workspaces:
+#        - name: source
+#          workspace: app-source
+#        - name: maven-settings
+#          workspace: maven-settings
       # ------------ CODE ANALYSIS ------------ #
       - name: code-analysis
         runAfter:
@@ -199,7 +206,20 @@ spec:
         params:
           - name: MOCK_MSG
             value: image-check
-            
+      # ------------ TAG IMAGE ------------ #
+      - name: tag-image
+        runAfter:
+          - image-check
+          - image-scan
+        taskRef:
+          name: tag-image
+        params:
+          - name: IMAGE
+            value: $(params.CI_NS_PREFIX)-app-dev/$(params.APP_NAME)
+          - name: IMAGE_TAG
+            value: latest
+          - name: IMAGE_NEW_TAG
+            value: "$(tasks.generate-version.results.version)"            
             
 #      - name: build-native-executable
 #        params:
