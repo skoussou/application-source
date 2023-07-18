@@ -28,7 +28,7 @@ metadata:
     pipelinesascode.tekton.dev/task-3: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/mock/0.1/task-mock.yaml"    
     pipelinesascode.tekton.dev/task-4: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/s2i-java-custom/0.1/s2i-java.yaml"    
     pipelinesascode.tekton.dev/task-5: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/task-tag-image/0.1/task-tag-image.yaml"    
-    pipelinesascode.tekton.dev/task-6: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/task-create-pr-to-deploy/0.1/task-create-pr-to-deploy.yaml"        
+    pipelinesascode.tekton.dev/task-6: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/task-create-pr-to-deploy/0.2/task-create-pr-to-deploy.yaml"        
 
     # How many runs we want to keep attached to this event
     pipelinesascode.tekton.dev/max-keep-runs: "5"
