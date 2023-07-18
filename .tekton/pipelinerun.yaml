@@ -171,7 +171,8 @@ spec:
         runAfter:
           - nexus-upload
         taskRef:
-          task: s2i-java-custom
+          kind: ClusterTask
+          task: s2i-java       
         params:
           - name: IMAGE
             value: $(params.REGISTRY)/$(params.APP_NAME)
