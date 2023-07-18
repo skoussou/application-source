@@ -172,7 +172,7 @@ spec:
           - nexus-upload
         taskRef:
           kind: ClusterTask
-          task: s2i-java       
+          name: s2i-java       
         params:
           - name: IMAGE
             value: $(params.REGISTRY)/$(params.APP_NAME)
