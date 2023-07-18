@@ -166,6 +166,39 @@ spec:
         params:
           - name: MOCK_MSG
             value: nexus-upload
+      # ------------ BUILD IMAGE ------------ #
+      - name: build-image
+        runAfter:
+          - nexus-upload
+        taskRef:
+          task: s2i-java-custom
+        params:
+          - name: IMAGE
+            value: $(params.REGISTRY)/$(params.APP_NAME)
+          - name: PATH_CONTEXT
+            value: $(params.APP_REPO_NAME)
+        workspaces:
+          - name: source
+            workspace: app-source
+      # ------------ IMAGE SCAN ------------ #
+      - name: image-scan
+        runAfter:
+          - build-image
+        taskRef:
+          name: mock
+        params:
+          - name: MOCK_MSG
+            value: image-scan
+      # ------------ IMAGE CHECK ------------ #
+      - name: image-check
+        runAfter:
+          - build-image
+        taskRef:
+          name: mock
+        params:
+          - name: MOCK_MSG
+            value: image-check
+            
             
 #      - name: build-native-executable
 #        params:
@@ -186,35 +219,7 @@ spec:
 #            workspace: app-source
 #          - name: maven-settings
 #            workspace: maven-settings
-
-      # ------------ BUILD IMAGE ------------ #
-      - name: build-image
-        runAfter:
-          - nexus-upload
-        taskRef:
-          name: mock
-        params:
-          - name: MOCK_MSG
-            value: build-scan
-
-      # ------------ IMAGE SCAN ------------ #
-      - name: image-scan
-        runAfter:
-          - build-image
-        taskRef:
-          name: mock
-        params:
-          - name: MOCK_MSG
-            value: image-scan
-      # ------------ IMAGE CHECK ------------ #
-      - name: image-check
-        runAfter:
-          - build-image
-        taskRef:
-          name: mock
-        params:
-          - name: MOCK_MSG
-            value: image-check
+            
             
   workspaces:
     - name: maven-settings
