@@ -20,6 +20,7 @@ metadata:
     pipelinesascode.tekton.dev/task-1: "maven"
 
     pipelinesascode.tekton.dev/task-2: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/task-generate-version/0.1/task-generate-version.yaml"
+    pipelinesascode.tekton.dev/task-3: "https://github.com/skoussou/tekton-catalog/blob/main/ci-tasks/resources/mock/0.1/task-mock.yaml"    
 
     # You can add more tasks by increasing the suffix number, you can specify
     # them as array to have multiple of them.
@@ -101,6 +102,7 @@ spec:
         workspaces:
           - name: source
             workspace: app-source
+      # ------------ UNIT TEST ------------ #
       # - name: mvn-config
       #   taskRef: 
       #     name: mvn-config
@@ -109,7 +111,6 @@ spec:
       #   workspaces:
       #   - name: workspace
       #     workspace: source
-
       - name: maven-test
         taskRef:
           name: maven
@@ -117,6 +118,8 @@ spec:
         runAfter:
           - generate-version
         params:
+          - name: CONTEXT_DIR
+            value: $(params.APP_REPO_NAME)
           - name: GOALS
             value:
               - clean
@@ -147,7 +150,9 @@ spec:
             
   workspaces:
     - name: maven-settings
-      emptyDir: {}
+      workspace: maven-settings
+      persistentVolumeClaim:
+        claimName: "maven-pvc"  
     - name: app-source
       workspace: app-source
       persistentVolumeClaim:
